@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+        KEYCLOAK_ADMIN: edmin
+        KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - 8181:8080
+    volumes:
+      - keycloak-data:/opt/keycloak/data
+    networks:
+      - auth
+    command: start-dev
+
+networks:
+  backend: {}
+  auth: {}
+
+volumes: 
+  - keycloak-data
