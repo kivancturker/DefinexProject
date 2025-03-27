@@ -2,22 +2,22 @@
   <div>
     <div class="product_wrappers_one">
       <div class="thumb">
-        <nuxt-link :to="{ path: '/product/' + product.id }" class="image">
+        <nuxt-link
+          :to="{ path: '/product/' + product.productId }"
+          class="image"
+        >
+          <img :src="product.imageUrl" :alt="product.name" />
           <img
-            :src="getImageUrl(imageSrc ? imageSrc : product.images[0].src)"
-            :alt="product.title"
-          />
-          <img
-            :src="getImageUrl(imageSrc ? imageSrc : product.images[1].src)"
-            :alt="product.title"
+            :src="product.imageUrl"
+            :alt="product.name"
             class="hover-image"
           />
         </nuxt-link>
-        <span class="badges">
+        <!-- <span class="badges">
           <span class="new" v-if="product.new">new</span>
           <span class="hot" v-else-if="product.hot">hot</span>
           <span class="" v-else></span>
-        </span>
+        </span> -->
         <div class="actions">
           <button
             @click="addToWishlist(product)"
@@ -47,20 +47,21 @@
           class="add-to-cart offcanvas-toggle"
           title="Add To Cart"
         >
-         Sepete Ekle
+          Sepete Ekle
         </button>
       </div>
 
       <div class="content">
         <h5 class="title text-capitalize">
           <nuxt-link :to="{ path: '/product/' + product.id }">{{
-            product.title
+            product.name
           }}</nuxt-link>
         </h5>
         <span class="price">
-          <span class="new" v-if="product.discount"
+          <!-- <span class="new" v-if="product.discount"
             >${{ discountedPrice(product) }}</span
-          >
+          > -->
+          <span class="new" v-if="false">${{ discountedPrice(product) }}</span>
           <span class="new" v-else>${{ product.price }}</span>
         </span>
       </div>
@@ -93,11 +94,11 @@
                     <div class="swiper-wrapper">
                       <div
                         class="swiper-slide"
-                        v-for="(imag, index) in product.images"
+                        v-for="(imag, index) in []"
                         :key="index"
                       >
                         <img
-                          :src="getImageUrl(imag.src)"
+                          :src="product.imageUrl"
                           :id="imag.image_id"
                           class="img-fluid bg-img"
                           alt="imag.alt"
@@ -109,8 +110,8 @@
               </div>
               <div class="col-lg-7 col-md-6 col-sm-12 col-12">
                 <div class="modal_product_content_one">
-                  <h3 class="text-capitalize">{{ product.title }}</h3>
-                  <div v-if="product.rating == 5" class="reviews_rating">
+                  <h3 class="text-capitalize">{{ product.name }}</h3>
+                  <!-- <div v-if="product.rating == 5" class="reviews_rating">
                     <i class="fas fa-star active"></i>
                     <i class="fas fa-star active"></i>
                     <i class="fas fa-star active"></i>
@@ -152,9 +153,9 @@
                   </div>
                   <div v-else class="product-review">
                     <span>No Rating</span>
-                  </div>
+                  </div> -->
 
-                  <h4 v-if="product.discount">
+                  <h4 v-if="false">
                     ${{ discountedPrice(product) }}
                     <del>${{ product.price }}</del>
                   </h4>
@@ -166,9 +167,7 @@
                     <ul class="color-variant d-flex">
                       <li
                         v-bind:class="{ active: activeColor == variant }"
-                        v-for="(variant, variantIndex) in Color(
-                          product.variants
-                        )"
+                        v-for="(variant, variantIndex) in []"
                         :key="variantIndex"
                       >
                         <a
@@ -266,11 +265,11 @@ export default {
   },
   mounted() {
     // For displaying default color and size on pageload
-    this.uniqColor = this.product.variants[0].color;
-    this.sizeVariant(this.product.variants[0].image_id);
-    // Active default color
-    this.activeColor = this.uniqColor;
-    this.changeSizeVariant(this.product.variants[0].size);
+    // this.uniqColor = this.product.variants[0].color;
+    // this.sizeVariant(this.product.variants[0].image_id);
+    // // Active default color
+    // this.activeColor = this.uniqColor;
+    // this.changeSizeVariant(this.product.variants[0].size);
   },
 
   methods: {

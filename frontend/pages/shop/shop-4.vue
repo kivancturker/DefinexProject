@@ -250,8 +250,17 @@ export default {
     }),
   },
   mounted() {
-    this.getPaginate();
-    this.updatePaginate(1);
+    // Fetch products from server first
+    try {
+      this.$store.dispatch("products/fetchProducts").then(() => {
+        console.log("Products fetched successfully");
+        console.log(this.shuffleproducts);
+        this.getPaginate();
+        this.updatePaginate(1);
+      });
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
 
     // For scroll page top for every Route
     window.scrollTo(0, 0);
