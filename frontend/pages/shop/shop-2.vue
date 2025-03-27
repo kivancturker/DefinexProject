@@ -16,17 +16,12 @@
         <div class="row">
           <!-- Loading indicator -->
           <div class="col-12 text-center" v-if="loading">
-            <div class="spinner-border text-primary" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-            <p>Loading products...</p>
+            <ShopLoader message="Loading products..." />
           </div>
 
           <!-- Error message -->
           <div class="col-12 text-center" v-else-if="error">
-            <div class="alert alert-danger">
-              {{ error }}
-            </div>
+            <ShopError :message="error" />
           </div>
 
           <!-- Product grid -->
@@ -79,6 +74,8 @@ import ShopBanner from "~/components/shop/ShopBanner";
 import ShopFilters from "~/components/shop/ShopFilters";
 import ShopPagination from "~/components/shop/ShopPagination";
 import ShopAlerts from "~/components/shop/ShopAlerts";
+import ShopLoader from "~/components/shop/ShopLoader";
+import ShopError from "~/components/shop/ShopError";
 
 export default {
   name: "shop-three-grid",
@@ -89,6 +86,8 @@ export default {
     ShopFilters,
     ShopPagination,
     ShopAlerts,
+    ShopLoader,
+    ShopError,
   },
   data() {
     return {
