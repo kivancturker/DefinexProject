@@ -1,82 +1,17 @@
 <template>
   <div>
     <!-- Banner Area -->
-    <section id="common_banner_one">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="common_banner_text">
-              <h2>{{ this.title }}</h2>
-              <b-breadcrumb
-                :items="breadcrumbItems"
-                class="bg-transparent"
-              ></b-breadcrumb>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <ShopBanner :title="title" :items="breadcrumbItems" />
 
     <!-- Shop Main Area -->
     <section id="shop_main_area" class="ptb-100">
       <div class="container">
-        <div class="row">
-          <div class="col-lg-6 col-md-12">
-            <div class="product_filter">
-              <div class="customs_selects">
-                <select
-                  name="product"
-                  class="customs_sel_box"
-                  @change="randomProduct"
-                >
-                  <option value="Filter">Filter</option>
-                  <option value="most_popular">Most Popular</option>
-                  <option value="best_seller">Best Seller</option>
-                  <option value="tranding">Tranding</option>
-                  <option value="featured">Featured</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6 col-md-12">
-            <div class="product_shot">
-              <div class="product_shot_title">
-                <p>Sort By:</p>
-              </div>
-              <div class="customs_selects">
-                <select
-                  name="product"
-                  class="customs_sel_box"
-                  @change="randomProduct"
-                >
-                  <option value="popularity">Sort by Popularity</option>
-                  <option value="new">Sort by new</option>
-                  <option value="low">Price: low to high</option>
-                  <option value="high">Price: high to low</option>
-                </select>
-              </div>
-              <div class="product_shot_view">
-                <ul>
-                  <li>
-                    <nuxt-link to="/shop/shop-3"
-                      ><i class="fas fa-list"></i
-                    ></nuxt-link>
-                  </li>
-                  <li>
-                    <nuxt-link to="/shop/shop-2"
-                      ><i class="fas fa-th-large"></i
-                    ></nuxt-link>
-                  </li>
-                  <li>
-                    <nuxt-link to="/shop" class="active"
-                      ><i class="fas fa-th"></i
-                    ></nuxt-link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- Filters and Sort -->
+        <ShopFilters
+          viewType="grid"
+          @filter-changed="randomProduct"
+          @sort-changed="randomProduct"
+        />
 
         <div class="row">
           <ShopSidebar />
@@ -97,109 +32,31 @@
                 />
               </div>
 
-              <!-- pagination start -->
+              <!-- Pagination -->
               <div class="col-lg-12">
-                <div
-                  class="product-pagination mb-0"
-                  v-if="shuffleproducts.length > this.paginate"
-                >
-                  <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                      <li class="page-item">
-                        <a
-                          class="page-link"
-                          href="javascript:void(0)"
-                          @click="updatePaginate(current - 1)"
-                        >
-                          <span aria-hidden="true">
-                            <i
-                              class="fa fa-chevron-left"
-                              style="font-size: 10px"
-                              aria-hidden="true"
-                            ></i>
-                          </span>
-                        </a>
-                      </li>
-                      <li
-                        class="page-item"
-                        v-for="(page_index, index) in this.pages"
-                        :key="index"
-                        :class="{ active: page_index == current }"
-                      >
-                        <a
-                          class="page-link"
-                          href="javascrip:void(0)"
-                          @click.prevent="updatePaginate(page_index)"
-                          >{{ page_index }}</a
-                        >
-                      </li>
-                      <li class="page-item">
-                        <a
-                          class="page-link"
-                          href="javascript:void(0)"
-                          @click="updatePaginate(current + 1)"
-                        >
-                          <span aria-hidden="true">
-                            <i
-                              class="fa fa-chevron-right"
-                              style="font-size: 10px"
-                              aria-hidden="true"
-                            ></i>
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
+                <ShopPagination
+                  :total-items="shuffleproducts.length"
+                  :items-per-page="paginate"
+                  :current-page="current"
+                  :paginate-range="paginateRange"
+                  @page-changed="onPageChanged"
+                />
               </div>
-              <!-- pagination end -->
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Instagram Arae -->
+    <!-- Instagram Area -->
     <InstagramArea />
 
-    <!-- Add to cart Alert / Notification  -->
-    <b-alert
-      :show="dismissCountDown"
-      dismissible
-      fade
-      variant="success"
+    <!-- Alerts -->
+    <ShopAlerts
+      :show-alert="dismissCountDown"
       @dismissed="dismissCountDown = 0"
       @dismiss-count-down="alert"
-    >
-      <p class="font-weight-normal">Successfully added to your list</p>
-    </b-alert>
-    <!-- Add to cart Alert / Notification  -->
-
-    <!-- Add to wishlist / wishlist Notification  -->
-    <b-alert
-      :show="dismissCountDown"
-      dismissible
-      fade
-      variant="success"
-      @dismissed="dismissCountDown = 0"
-      @dismiss-count-down="alert"
-    >
-      <p class="font-weight-normal">Successfully added to your list</p>
-    </b-alert>
-    <!-- Add to wishlist / wishlist Notification  -->
-
-    <!-- Add to Compare / Compare Notification  -->
-    <b-alert
-      :show="dismissCountDown"
-      dismissible
-      fade
-      variant="success"
-      @dismissed="dismissCountDown = 0"
-      @dismiss-count-down="alert"
-    >
-      <p class="font-weight-normal">Successfully added to your list</p>
-    </b-alert>
-    <!-- Add to Compare / Compare Notification  -->
+    />
   </div>
 </template>
 
@@ -208,6 +65,11 @@ import { mapState } from "vuex";
 import ProductBox1 from "~/components/product-box/ProductBox1";
 import InstagramArea from "~/components/instagram/InstagramArea";
 import ShopSidebar from "~/components/widgets/ShopSidebar";
+import ShopBanner from "~/components/shop/ShopBanner";
+import ShopFilters from "~/components/shop/ShopFilters";
+import ShopPagination from "~/components/shop/ShopPagination";
+import ShopAlerts from "~/components/shop/ShopAlerts";
+import shopMixin from "~/mixins/shopMixin";
 
 export default {
   name: "shop-left-sidebar",
@@ -215,7 +77,12 @@ export default {
     ProductBox1,
     InstagramArea,
     ShopSidebar,
+    ShopBanner,
+    ShopFilters,
+    ShopPagination,
+    ShopAlerts,
   },
+  mixins: [shopMixin],
   data() {
     return {
       title: "Shop",
@@ -326,6 +193,11 @@ export default {
     },
     getallProduct() {
       this.$store.dispatch("products/getallProduct");
+    },
+
+    // Override mixin method to handle pagination
+    onPageChanged(page) {
+      this.updatePaginate(page);
     },
   },
 
