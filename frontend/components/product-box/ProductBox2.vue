@@ -4,11 +4,11 @@
       <div class="row">
         <div class="col-lg-3">
           <div class="thumb">
-            <nuxt-link :to="{ path: '/product/' + product.id }" class="image">
-              <img
-                :src="getImageUrl(imageSrc ? imageSrc : product.images[0].src)"
-                :alt="product.title"
-              />
+            <nuxt-link
+              :to="{ path: '/product/' + product.productId }"
+              class="image"
+            >
+              <img :src="product.imageUrl" :alt="product.name" />
             </nuxt-link>
           </div>
         </div>
@@ -16,13 +16,13 @@
           <div class="content">
             <div class="product_para_top">
               <h4 class="title text-capitalize">
-                <nuxt-link :to="{ path: '/product/' + product.id }">{{
-                  product.title
+                <nuxt-link :to="{ path: '/product/' + product.productId }">{{
+                  product.name
                 }}</nuxt-link>
               </h4>
               <p>{{ product.description }}</p>
               <span class="price">
-                <span class="new" v-if="product.discount"
+                <span class="new" v-if="false"
                   >${{ discountedPrice(product) }}</span
                 >
                 <span class="new" v-else>${{ product.price }}</span>
@@ -92,14 +92,14 @@
                     <div class="swiper-wrapper">
                       <div
                         class="swiper-slide"
-                        v-for="(imag, index) in product.images"
+                        v-for="(imag, index) in []"
                         :key="index"
                       >
                         <img
-                          :src="getImageUrl(imag.src)"
-                          :id="imag.image_id"
+                          :src="product.imageUrl"
+                          :id="index"
                           class="img-fluid bg-img"
-                          alt="imag.alt"
+                          alt="product image"
                         />
                       </div>
                     </div>
@@ -108,76 +108,27 @@
               </div>
               <div class="col-lg-7 col-md-6 col-sm-12 col-12">
                 <div class="modal_product_content_one">
-                  <h3 class="text-capitalize">{{ product.title }}</h3>
-                  <div v-if="product.rating == 5" class="reviews_rating">
-                    <i class="fas fa-star active"></i>
-                    <i class="fas fa-star active"></i>
-                    <i class="fas fa-star active"></i>
-                    <i class="fas fa-star active"></i>
-                    <i class="fas fa-star active"></i>
-                    <span>(5 Customer Review)</span>
-                  </div>
-                  <div v-else-if="product.rating == 4" class="reviews_rating">
-                    <i class="fas fa-star active"></i>
-                    <i class="fas fa-star active"></i>
-                    <i class="fas fa-star active"></i>
-                    <i class="fas fa-star active"></i>
-                    <i class="fas fa-star"></i>
-                    <span>(4 Customer Review)</span>
-                  </div>
-                  <div v-else-if="product.rating == 3" class="reviews_rating">
-                    <i class="fas fa-star active"></i>
-                    <i class="fas fa-star active"></i>
-                    <i class="fas fa-star active"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <span>(3 Customer Review)</span>
-                  </div>
-                  <div v-else-if="product.rating == 2" class="reviews_rating">
-                    <i class="fas fa-star active"></i>
-                    <i class="fas fa-star active"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <span>(2 Customer Review)</span>
-                  </div>
-                  <div v-else-if="product.rating == 1" class="reviews_rating">
-                    <i class="fas fa-star active"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <span>(1 Customer Review)</span>
-                  </div>
-                  <div v-else class="product-review">
-                    <span>No Rating</span>
-                  </div>
-
-                  <h4 v-if="product.discount">
+                  <h3 class="text-capitalize">{{ product.name }}</h3>
+                  <RatingStars :rating="product.rating" />
+                  <div v-if="false">
                     ${{ discountedPrice(product) }}
                     <del>${{ product.price }}</del>
-                  </h4>
-                  <h4 v-else>${{ product.price }}</h4>
+                  </div>
+                  <div v-else>${{ product.price }}</div>
                   <p>{{ product.description }}</p>
                   <div class="variable-single-item">
                     <span>Color</span>
                     <ul class="color-variant d-flex">
                       <li
                         v-bind:class="{ active: activeColor == variant }"
-                        v-for="(variant, variantIndex) in Color(
-                          product.variants
-                        )"
+                        v-for="(variant, variantIndex) in []"
                         :key="variantIndex"
                       >
                         <a
                           :class="[variant]"
                           v-bind:style="{ 'background-color': variant }"
                           @click="
-                            sizeVariant(
-                              product.variants[variantIndex].image_id,
-                              variantIndex,
-                              variant
-                            )
+                            sizeVariant(variantIndex, variantIndex, variant)
                           "
                         ></a>
                       </li>
@@ -225,8 +176,13 @@
 
 <script>
 import { mapState } from "vuex";
+import RatingStars from "@/components/ui/RatingStars.vue";
+
 export default {
   name: "ProductBox2",
+  components: {
+    RatingStars,
+  },
   props: ["product", "index"],
 
   data() {
@@ -263,12 +219,12 @@ export default {
     },
   },
   mounted() {
-    // For displaying default color and size on pageload
-    this.uniqColor = this.product.variants[0].color;
-    this.sizeVariant(this.product.variants[0].image_id);
+    // Commented out for the refactored version
+    // this.uniqColor = this.product.variants[0].color;
+    // this.sizeVariant(this.product.variants[0].image_id);
     // Active default color
-    this.activeColor = this.uniqColor;
-    this.changeSizeVariant(this.product.variants[0].size);
+    // this.activeColor = this.uniqColor;
+    // this.changeSizeVariant(this.product.variants[0].size);
   },
 
   methods: {
@@ -333,11 +289,12 @@ export default {
       // this.swiper.slideTo(slideId, 1000, false)
       this.size = [];
       this.activeColor = color;
-      this.product.variants.filter((item) => {
-        if (id === item.image_id) {
-          this.size.push(item.size);
-        }
-      });
+      // Adjusted for the new structure
+      // this.product.variants.filter((item) => {
+      //   if (id === item.image_id) {
+      //     this.size.push(item.size);
+      //   }
+      // });
     },
   },
 };

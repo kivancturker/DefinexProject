@@ -1,16 +1,15 @@
 <template>
-  <div class="rating-stars">
-    <div class="stars">
+  <div>
+    <div v-if="rating" class="reviews_rating">
       <i
         v-for="index in 5"
         :key="index"
         :class="['fas', 'fa-star', { active: index <= rating }]"
       ></i>
     </div>
-    <span v-if="reviewCount !== undefined && reviewCount !== null">
-      ({{ reviewCount }}
-      {{ reviewCount === 1 ? "Customer Review" : "Customer Reviews" }})
-    </span>
+    <div v-else class="product-review">
+      <span>No Rating</span>
+    </div>
   </div>
 </template>
 
@@ -23,23 +22,15 @@ export default {
       default: 0,
       validator: (value) => value >= 0 && value <= 5,
     },
-    reviewCount: {
-      type: Number,
-      default: null,
-    },
   },
 };
 </script>
 
 <style scoped>
-.rating-stars {
+.reviews_rating {
   display: flex;
   align-items: center;
-}
-
-.stars {
-  display: flex;
-  margin-right: 5px;
+  margin-bottom: 10px;
 }
 
 .fa-star {

@@ -46,50 +46,7 @@
             <div class="product_details_right_one">
               <div class="modal_product_content_one">
                 <h3 class="text-capitalize">{{ getDetail.title }}</h3>
-                <div v-if="getDetail.rating == 5" class="reviews_rating">
-                  <i class="fas fa-star active"></i>
-                  <i class="fas fa-star active"></i>
-                  <i class="fas fa-star active"></i>
-                  <i class="fas fa-star active"></i>
-                  <i class="fas fa-star active"></i>
-                  <span>(5 Customer Review)</span>
-                </div>
-                <div v-else-if="getDetail.rating == 4" class="reviews_rating">
-                  <i class="fas fa-star active"></i>
-                  <i class="fas fa-star active"></i>
-                  <i class="fas fa-star active"></i>
-                  <i class="fas fa-star active"></i>
-                  <i class="fas fa-star"></i>
-                  <span>(4 Customer Review)</span>
-                </div>
-                <div v-else-if="getDetail.rating == 3" class="reviews_rating">
-                  <i class="fas fa-star active"></i>
-                  <i class="fas fa-star active"></i>
-                  <i class="fas fa-star active"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <span>(3 Customer Review)</span>
-                </div>
-                <div v-else-if="getDetail.rating == 2" class="reviews_rating">
-                  <i class="fas fa-star active"></i>
-                  <i class="fas fa-star active"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <span>(2 Customer Review)</span>
-                </div>
-                <div v-else-if="getDetail.rating == 1" class="reviews_rating">
-                  <i class="fas fa-star active"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <span>(1 Customer Review)</span>
-                </div>
-                <div v-else class="product-review">
-                  <span>No Rating</span>
-                </div>
-
+                <RatingStars :rating="getDetail.rating" />
                 <h4 v-if="getDetail.discount">
                   ${{ discountedPrice(getDetail) }}
                   <del>${{ getDetail.price }}</del>
@@ -397,6 +354,7 @@
 import ProductBox1 from "~/components/product-box/ProductBox1";
 import InstagramArea from "~/components/instagram/InstagramArea";
 import RelatedProducts from "~/components/widgets/RelatedProducts";
+import RatingStars from "@/components/ui/RatingStars.vue";
 
 export default {
   name: "product-single",
@@ -404,6 +362,7 @@ export default {
     ProductBox1,
     InstagramArea,
     RelatedProducts,
+    RatingStars,
   },
   data() {
     return {

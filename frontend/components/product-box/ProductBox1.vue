@@ -111,11 +111,7 @@
               <div class="col-lg-7 col-md-6 col-sm-12 col-12">
                 <div class="modal_product_content_one">
                   <h3 class="text-capitalize">{{ product.name }}</h3>
-                  <!-- <RatingStars
-                    v-if="product.rating"
-                    :rating="product.rating"
-                    :reviewCount="product.reviewCount"
-                  /> -->
+                  <RatingStars :rating="product.rating" />
                   <!-- <div v-if="product.rating == 5" class="reviews_rating">
                     <i class="fas fa-star active"></i>
                     <i class="fas fa-star active"></i>
