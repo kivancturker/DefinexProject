@@ -530,4 +530,4 @@ export default {
     };
   },
 };
-</script> 
+</script>

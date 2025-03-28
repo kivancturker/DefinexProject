@@ -53,7 +53,7 @@
 
       <div class="content">
         <h5 class="title text-capitalize">
-          <nuxt-link :to="{ path: '/product/' + product.id }">{{
+          <nuxt-link :to="{ path: '/product/' + product.productId }">{{
             product.name
           }}</nuxt-link>
         </h5>
@@ -99,7 +99,7 @@
                       >
                         <img
                           :src="product.imageUrl"
-                          :id="imag.image_id"
+                          :id="index"
                           class="img-fluid bg-img"
                           alt="imag.alt"
                         />
@@ -111,6 +111,11 @@
               <div class="col-lg-7 col-md-6 col-sm-12 col-12">
                 <div class="modal_product_content_one">
                   <h3 class="text-capitalize">{{ product.name }}</h3>
+                  <!-- <RatingStars
+                    v-if="product.rating"
+                    :rating="product.rating"
+                    :reviewCount="product.reviewCount"
+                  /> -->
                   <!-- <div v-if="product.rating == 5" class="reviews_rating">
                     <i class="fas fa-star active"></i>
                     <i class="fas fa-star active"></i>
@@ -226,8 +231,13 @@
 
 <script>
 import { mapState } from "vuex";
+import RatingStars from "@/components/ui/RatingStars.vue";
+
 export default {
   name: "ProductBox1",
+  components: {
+    RatingStars,
+  },
   props: ["product", "index"],
 
   data() {

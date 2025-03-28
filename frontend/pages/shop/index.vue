@@ -14,8 +14,20 @@
         />
 
         <div class="row">
+          <!-- Loading indicator -->
+          <div class="col-12 text-center" v-if="loading">
+            <ShopLoader message="Loading products..." />
+          </div>
+
+          <!-- Error message -->
+          <div class="col-12 text-center" v-else-if="error">
+            <ShopError :message="error" />
+          </div>
+
+          <!-- Product grid -->
           <div
             class="col-lg-3 col-md-4 col-sm-6 col-12"
+            v-else
             v-for="(product, index) in shuffleproducts"
             :key="index"
             v-show="setPaginate(index)"
@@ -29,7 +41,7 @@
           </div>
 
           <!-- Pagination -->
-          <div class="col-lg-12">
+          <div class="col-lg-12" v-if="!loading && !error">
             <ShopPagination
               :total-items="shuffleproducts.length"
               :items-per-page="paginate"
@@ -62,7 +74,8 @@ import ShopBanner from "~/components/shop/ShopBanner";
 import ShopFilters from "~/components/shop/ShopFilters";
 import ShopPagination from "~/components/shop/ShopPagination";
 import ShopAlerts from "~/components/shop/ShopAlerts";
-import shopMixin from "~/mixins/shopMixin";
+import ShopLoader from "~/components/shop/ShopLoader";
+import ShopError from "~/components/shop/ShopError";
 
 export default {
   name: "shop-four-grid",
@@ -73,12 +86,15 @@ export default {
     ShopFilters,
     ShopPagination,
     ShopAlerts,
+    ShopLoader,
+    ShopError,
   },
-  mixins: [shopMixin],
   data() {
     return {
       title: "Shop",
       dismissCountDown: 0,
+      loading: false,
+      error: null,
 
       // Breadcrumb Items Data
       breadcrumbItems: [
@@ -92,7 +108,7 @@ export default {
         },
       ],
 
-      //Paginaion
+      //Pagination
       current: 1,
       paginate: 12,
       paginateRange: 3,
@@ -103,17 +119,39 @@ export default {
   computed: {
     ...mapState({
       shuffleproducts: (state) => state.products.shuffleproducts,
+      storeLoading: (state) => state.products.loading,
+      storeError: (state) => state.products.error,
     }),
   },
+  watch: {
+    storeLoading(newVal) {
+      this.loading = newVal;
+    },
+    storeError(newVal) {
+      this.error = newVal;
+    },
+  },
   mounted() {
-    this.getPaginate();
-    this.updatePaginate(1);
+    // Fetch products from server first
+    this.loading = true;
+    try {
+      this.$store.dispatch("products/fetchProducts").then(() => {
+        console.log("Products fetched successfully");
+        this.getPaginate();
+        this.updatePaginate(1);
+        this.loading = this.storeLoading;
+        this.error = this.storeError;
+      });
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      this.error = error.message || "Failed to load products";
+    }
 
     // For scroll page top for every Route
     window.scrollTo(0, 0);
   },
   methods: {
-    // Product added Alert / notificaion
+    // Product added Alert / notification
     alert(item) {
       this.dismissCountDown = item;
     },
@@ -170,7 +208,7 @@ export default {
       }
       this.$store.dispatch("products/shuffleProduct", array.slice(0, 30));
     },
-    // Override mixin method to handle pagination
+    // Handle pagination page change
     onPageChanged(page) {
       this.updatePaginate(page);
     },
