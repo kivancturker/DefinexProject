@@ -20,20 +20,21 @@
     <!-- Product Single Area -->
     <section id="product_single_one" class="ptb-100">
       <div class="container">
-        <div class="row area_boxed">
+        <div class="row" v-if="loading">
+          <ShopLoader message="Loading product details..." />
+        </div>
+        <div class="row" v-else-if="error">
+          <ShopError :message="error" />
+        </div>
+        <div v-else class="row area_boxed">
           <div class="col-lg-4">
             <div class="product_single_one_img">
               <div v-swiper:mySwiper="swiperOption" ref="mySwiper">
                 <div class="swiper-wrapper">
-                  <div
-                    class="swiper-slide"
-                    v-for="(product, index) in getDetail.images"
-                    :key="index"
-                  >
+                  <div class="swiper-slide">
                     <inner-image-zoom
-                      :src="getImageUrl(product.src)"
-                      :id="product.image_id"
-                      :zoomSrc="getImageUrl(product.src)"
+                      :src="product.imageUrl"
+                      :zoomSrc="product.imageUrl"
                       moveType="drag"
                       className="product-image-zoom"
                     />
@@ -45,14 +46,14 @@
           <div class="col-lg-8">
             <div class="product_details_right_one">
               <div class="modal_product_content_one">
-                <h3 class="text-capitalize">{{ getDetail.title }}</h3>
-                <RatingStars :rating="getDetail.rating" />
-                <h4 v-if="getDetail.discount">
-                  ${{ discountedPrice(getDetail) }}
-                  <del>${{ getDetail.price }}</del>
+                <h3 class="text-capitalize">{{ product.name }}</h3>
+                <RatingStars :rating="product.rating" />
+                <h4 v-if="false">
+                  ${{ discountedPrice(product) }}
+                  <del>${{ product.price }}</del>
                 </h4>
-                <h4 v-else>${{ getDetail.price }}</h4>
-                <p>{{ getDetail.description }}</p>
+                <h4 v-else>${{ product.price }}</h4>
+                <p>{{ product.description }}</p>
                 <div class="customs_selects">
                   <select name="product" class="customs_sel_box">
                     <option value="size">Size</option>
@@ -64,27 +65,8 @@
                 </div>
                 <div class="variable-single-item">
                   <span>Color</span>
-
                   <ul class="color-variant d-flex">
-                    <li
-                      v-bind:class="{ active: activeColor == variant }"
-                      v-for="(variant, variantIndex) in Color(
-                        getDetail.variants
-                      )"
-                      :key="variantIndex"
-                    >
-                      <a
-                        :class="[variant]"
-                        v-bind:style="{ 'background-color': variant }"
-                        @click="
-                          sizeVariant(
-                            getDetail.variants[variantIndex].image_id,
-                            variantIndex,
-                            variant
-                          )
-                        "
-                      ></a>
-                    </li>
+                    <!-- Color variants removed since they don't exist in new model -->
                   </ul>
                 </div>
                 <form id="product_count_form_two">
@@ -103,7 +85,7 @@
                   <ul>
                     <li>
                       <button
-                        @click="addToWishlist(getDetail)"
+                        @click="addToWishlist(product)"
                         class="action wishlist bg-transparent"
                         title="Wishlist"
                       >
@@ -112,7 +94,7 @@
                     </li>
                     <li>
                       <button
-                        @click="addToCompare(getDetail)"
+                        @click="addToCompare(product)"
                         class="action compare bg-transparent"
                         title="Compare"
                       >
@@ -121,7 +103,7 @@
                     </li>
                   </ul>
                   <button
-                    @click="addToCart(getDetail)"
+                    @click="addToCart(product)"
                     class="theme-btn-one btn-black-overlay btn_sm"
                   >
                     Add To Cart
@@ -131,7 +113,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div v-if="!loading && !error" class="row">
           <div class="col-lg-12">
             <div class="product_details_tabs">
               <b-tabs>
@@ -343,7 +325,11 @@
       </div>
     </section>
 
-    <RelatedProducts :productType="productType" :productId="productId" />
+    <RelatedProducts
+      v-if="!loading && !error"
+      :productType="productType"
+      :productId="productId"
+    />
 
     <!-- Instagram Arae -->
     <InstagramArea />
@@ -355,6 +341,9 @@ import ProductBox1 from "~/components/product-box/ProductBox1";
 import InstagramArea from "~/components/instagram/InstagramArea";
 import RelatedProducts from "~/components/widgets/RelatedProducts";
 import RatingStars from "@/components/ui/RatingStars.vue";
+import ProductService from "@/services/product-service";
+import ShopLoader from "~/components/shop/ShopLoader.vue";
+import ShopError from "~/components/shop/ShopError.vue";
 
 export default {
   name: "product-single",
@@ -363,6 +352,8 @@ export default {
     InstagramArea,
     RelatedProducts,
     RatingStars,
+    ShopLoader,
+    ShopError,
   },
   data() {
     return {
@@ -372,6 +363,9 @@ export default {
       size: [],
       productType: "",
       productId: "",
+      product: null,
+      loading: true,
+      error: null,
       // Breadcrumb Items Data
       breadcrumbItems: [
         {
@@ -396,33 +390,43 @@ export default {
   },
 
   computed: {
-    getDetail: function () {
-      return this.$store.getters["products/getProductById"](
-        this.$route.params.id
-      );
-    },
     swiper() {
       return this.$refs.mySwiper.swiper;
     },
   },
 
-  mounted() {
-    // For displaying default color and size on pageload
-    this.uniqColor = this.getDetail.variants[0].color;
-    this.sizeVariant(this.getDetail.variants[0].image_id);
-    // Active default color
-    this.activeColor = this.uniqColor;
-    this.changeSizeVariant(this.getDetail.variants[0].size);
-    this.relatedProducts();
+  async mounted() {
+    try {
+      this.loading = true;
+      this.error = null;
+
+      const productId = this.$route.params.id;
+      const response = await ProductService.getById(productId);
+
+      if (response && response.result) {
+        this.product = response.result;
+      } else {
+        this.product = response;
+      }
+
+      if (this.product) {
+        this.productType = this.product.categoryName;
+        this.productId = this.product.productId;
+      } else {
+        this.error = "Product not found";
+      }
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      this.error = error.message || "Failed to load product";
+    } finally {
+      this.loading = false;
+    }
 
     // For scroll page top for every Route
     window.scrollTo(0, 0);
   },
 
   methods: {
-    getImageUrl(path) {
-      return require("@/assets/img/product-image/" + path);
-    },
     discountedPrice(product) {
       const price = product.price - (product.price * product.discount) / 100;
       return price;
@@ -440,50 +444,22 @@ export default {
     addToCompare: function (product) {
       this.$store.dispatch("products/addToCompare", product);
     },
-    // Related Product Display
-    relatedProducts() {
-      this.productType = this.getDetail.type;
-      this.productId = this.getDetail.id;
-    },
-
-    // Display Unique color
-    Color(variants) {
-      const uniqColor = [];
-      for (let i = 0; i < Object.keys(variants).length; i++) {
-        if (uniqColor.indexOf(variants[i].color) === -1) {
-          uniqColor.push(variants[i].color);
-        }
-      }
-      return uniqColor;
-    },
-    // Change Size Variant
-    changeSizeVariant(variant) {
-      this.selectedSize = variant;
-    },
     slideTo(id) {
       this.swiper.slideTo(id, 1000, false);
-    },
-    sizeVariant(id, slideId, color) {
-      this.swiper.slideTo(slideId, 1000, false);
-      this.size = [];
-      this.activeColor = color;
-      this.getDetail.variants.filter((item) => {
-        if (id === item.image_id) {
-          this.size.push(item.size);
-        }
-      });
     },
   },
 
   // Page head() Title, description for SEO
   head() {
     return {
-      title: this.title,
+      title: this.product ? this.product.name : "Product Details",
       meta: [
         {
           hid: "description",
           name: "description",
-          content: "Shop page - AndShop Ecommerce Vue js, Nuxt js Template",
+          content: this.product
+            ? this.product.description
+            : "Product Details Page",
         },
       ],
     };

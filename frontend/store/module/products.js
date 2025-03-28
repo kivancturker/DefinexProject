@@ -21,7 +21,7 @@ const getters = {
   getProductById: (state) => {
     return (id) =>
       state.products.find((product) => {
-        return product.id === +id;
+        return product.productId === +id;
       });
   },
   wishlistItems: (state) => {
@@ -47,8 +47,12 @@ const mutations = {
     state.error = error;
   },
   addToWishlist: (state, payload) => {
-    const product = state.products.find((item) => item.id === payload.id);
-    const wishlistItems = state.wishlist.find((item) => item.id === payload.id);
+    const product = state.products.find(
+      (item) => item.productId === payload.productId
+    );
+    const wishlistItems = state.wishlist.find(
+      (item) => item.productId === payload.productId
+    );
     if (wishlistItems) {
     } else {
       state.wishlist.push({
@@ -61,8 +65,12 @@ const mutations = {
     state.wishlist.splice(index, 1);
   },
   addToCompare: (state, payload) => {
-    const product = state.products.find((item) => item.id === payload.id);
-    const compareItems = state.compare.find((item) => item.id === payload.id);
+    const product = state.products.find(
+      (item) => item.productId === payload.productId
+    );
+    const compareItems = state.compare.find(
+      (item) => item.productId === payload.productId
+    );
     if (compareItems) {
     } else {
       state.compare.push({
@@ -79,7 +87,7 @@ const mutations = {
     state.searchProduct = [];
     if (payload.length) {
       state.products.filter((product) => {
-        if (product.title.toLowerCase().includes(payload)) {
+        if (product.name.toLowerCase().includes(payload)) {
           state.searchProduct.push(product);
         }
       });
