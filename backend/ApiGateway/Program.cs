@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
@@ -20,10 +19,10 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader());
 });
 
+// Authentication configuration
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
-
         options.Authority = "https://localhost:44365/";
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -31,24 +30,20 @@ builder.Services.AddAuthentication("Bearer")
         };
     });
 
+// Configure Ocelot
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 builder.Services.AddOcelot(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
-// if (app.Environment.IsDevelopment())
-// {
-//     app.UseSwagger();
-//     app.UseSwaggerUI();
-// }
-
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
 
+// These MUST be before Ocelot middleware
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Use Ocelot middleware
 await app.UseOcelot();
 
 app.Run();

@@ -6,14 +6,18 @@ export default ({ app, store, redirect }, inject) => {
   // Add an interceptor to attach the access token to requests
   http.interceptors.request.use(
     (config) => {
+      console.log("Request interceptor running");
       // Check if the user is authenticated
       if (AuthService.isAuthenticated()) {
         // Add access token to the Authorization header
         const token = AuthService.getAccessToken();
+        console.log("Token value:", token);
         if (token) {
           config.headers[API.HEADERS.AUTHORIZATION] = `Bearer ${token}`;
+          console.log("Added Authorization header");
         }
       }
+      console.log("Final request headers:", config.headers);
       return config;
     },
     (error) => {
