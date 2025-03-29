@@ -1,91 +1,116 @@
 @model LoginViewModel
 
-<div class="login-page">
-    <div class="lead">
-        <h1>Login</h1>
-        <p>Choose how to login</p>
-    </div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-8">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-light">
+                    <h3 class="text-center font-weight-bold my-2">Login</h3>
+                </div>
+                <div class="card-body">
+                    <partial name="_ValidationSummary" />
 
-    <partial name="_ValidationSummary" />
-
-    <div class="row">
-
-        @if (Model.EnableLocalLogin)
-        {
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Local Account</h2>
-                    </div>
-
-                    <div class="card-body">
+                    @if (Model.EnableLocalLogin)
+                    {
                         <form asp-route="Login">
                             <input type="hidden" asp-for="ReturnUrl" />
 
-                            <div class="form-group">
-                                <label asp-for="Username"></label>
-                                <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
+                            <div class="form-group mb-3">
+                                <label class="small mb-1" asp-for="Username">Username or email <span class="text-danger">*</span></label>
+                                <input class="form-control py-2" placeholder="Enter your username or email" asp-for="Username" autofocus>
                             </div>
-                            <div class="form-group">
-                                <label asp-for="Password"></label>
-                                <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
+                            
+                            <div class="form-group mb-3">
+                                <label class="small mb-1" asp-for="Password">Password <span class="text-danger">*</span></label>
+                                <input type="password" class="form-control py-2" placeholder="Enter your password" asp-for="Password" autocomplete="off">
                             </div>
+                            
                             @if (Model.AllowRememberLogin)
                             {
-                                <div class="form-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" asp-for="RememberLogin">
-                                        <label class="form-check-label" asp-for="RememberLogin">
-                                            Remember My Login
-                                        </label>
+                                <div class="form-group mb-3">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" id="rememberMe" type="checkbox" asp-for="RememberLogin">
+                                        <label class="custom-control-label" for="rememberMe">Remember me</label>
                                     </div>
                                 </div>
                             }
-                            <button class="btn btn-primary" name="button" value="login">Login</button>
-                            <button class="btn btn-secondary" name="button" value="cancel">Cancel</button>
+
+                            <div class="form-group d-flex align-items-center justify-content-center mt-4 mb-0">
+                                <button type="submit" class="btn btn-primary btn-block py-2 px-4" name="button" value="login">LOGIN</button>
+                            </div>
+                            
+                            <div class="text-center mt-3">
+                                <a class="small text-decoration-none" href="@Url.Action("Register",new {Model.ReturnUrl })">Create Your Account?</a>
+                            </div>
                         </form>
-                    </div>
+                    }
 
-                    <div class="card-footer">
-                         <a href="@Url.Action("Register",new {Model.ReturnUrl })">New User? Register</a>
-                    </div>
-                </div>
-            </div>
-        }
-
-        @if (Model.VisibleExternalProviders.Any())
-        {
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>External Account</h2>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-inline">
-                            @foreach (var provider in Model.VisibleExternalProviders)
-                            {
-                                <li class="list-inline-item">
-                                    <a class="btn btn-secondary"
+                    @if (Model.VisibleExternalProviders.Any())
+                    {
+                        <div class="mt-4">
+                            <div class="text-center">
+                                <h6 class="mb-3">Or sign in with</h6>
+                                <hr class="my-3">
+                            </div>
+                            <div class="d-flex flex-wrap justify-content-center">
+                                @foreach (var provider in Model.VisibleExternalProviders)
+                                {
+                                    <a class="btn btn-outline-secondary mx-1 mb-2"
                                        asp-controller="External"
                                        asp-action="Challenge"
                                        asp-route-scheme="@provider.AuthenticationScheme"
                                        asp-route-returnUrl="@Model.ReturnUrl">
                                         @provider.DisplayName
                                     </a>
-                                </li>
-                            }
-                        </ul>
-                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+                    {
+                        <div class="alert alert-warning">
+                            <strong>Invalid login request</strong>
+                            There are no login schemes configured for this request.
+                        </div>
+                    }
                 </div>
             </div>
-        }
-
-        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
-        {
-            <div class="alert alert-warning">
-                <strong>Invalid login request</strong>
-                There are no login schemes configured for this request.
-            </div>
-        }
+        </div>
     </div>
 </div>
+
+<style>
+    .btn-primary {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: white;
+        transition: all 0.3s;
+    }
+    
+    .btn-primary:hover {
+        background-color: #0b5ed7;
+        border-color: #0a58ca;
+    }
+    
+    .card {
+        transition: all 0.3s ease;
+    }
+    
+    .card-header {
+        border-bottom: none;
+    }
+    
+    .form-control:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    
+    a {
+        color: #0d6efd;
+    }
+    
+    a:hover {
+        color: #0a58ca;
+    }
+</style>
