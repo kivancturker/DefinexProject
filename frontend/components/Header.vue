@@ -5,13 +5,7 @@
       <div class="header-wrapper">
         <div
           id="header"
-          class="
-            header-bottom
-            header-bottom-color--golden
-            section-fluid
-            sticky-header
-            sticky-color--golden
-          "
+          class="header-bottom header-bottom-color--golden section-fluid sticky-header sticky-color--golden"
         >
           <div class="container">
             <div class="row">
@@ -35,38 +29,49 @@
                   <nav>
                     <ul>
                       <li class="has-dropdown">
-                        <a href="#">Kategoriler <i class="fa fa-angle-down"></i></a>
+                        <a href="#"
+                          >Kategoriler <i class="fa fa-angle-down"></i
+                        ></a>
                         <!-- Sub Menu -->
                         <ul class="sub-menu">
-                          <li><nuxt-link to="/shop/shop-4">Filtrele</nuxt-link></li>
-                          
-                        </ul>
-                      </li>
-
-                     
-                      <li class="has-dropdown">
-                        <a href="#">Hakkımızda <i class="fa fa-angle-down"></i></a>
-                        <!-- Sub Menu -->
-                        <ul class="sub-menu">
-                          <li><nuxt-link to="about-us">Biz Kimiz</nuxt-link></li>
-                          
+                          <li>
+                            <nuxt-link to="/shop/shop-4">Filtrele</nuxt-link>
+                          </li>
                         </ul>
                       </li>
 
                       <li class="has-dropdown">
-                        <a href="#">Bize Ulaşın <i class="fa fa-angle-down"></i></a>
+                        <a href="#"
+                          >Hakkımızda <i class="fa fa-angle-down"></i
+                        ></a>
                         <!-- Sub Menu -->
                         <ul class="sub-menu">
-                          <li><nuxt-link to="contact-us">Bize Ulaşın</nuxt-link></li>
-                          
+                          <li>
+                            <nuxt-link to="about-us">Biz Kimiz</nuxt-link>
+                          </li>
                         </ul>
                       </li>
-                       <li class="has-dropdown">
+
+                      <li class="has-dropdown">
+                        <a href="#"
+                          >Bize Ulaşın <i class="fa fa-angle-down"></i
+                        ></a>
+                        <!-- Sub Menu -->
+                        <ul class="sub-menu">
+                          <li>
+                            <nuxt-link to="contact-us">Bize Ulaşın</nuxt-link>
+                          </li>
+                        </ul>
+                      </li>
+                      <li class="has-dropdown">
                         <a href="#">Hesabım <i class="fa fa-angle-down"></i></a>
                         <!-- Sub Menu -->
                         <ul class="sub-menu">
-                          <li><nuxt-link to="/my-account/orders">Siparişlerim</nuxt-link></li>
-                          
+                          <li>
+                            <nuxt-link to="/my-account/orders"
+                              >Siparişlerim</nuxt-link
+                            >
+                          </li>
                         </ul>
                       </li>
                     </ul>
@@ -76,32 +81,35 @@
 
                 <!-- Start Header Action Link -->
                 <ul
-                  class="
-                    header-action-link
-                    action-color--black
-                    action-hover-color--golden
-                  "
+                  class="header-action-link action-color--black action-hover-color--golden"
                 >
-                  <li>
-                    <a v-b-toggle.offcanvas-wishlish class="offcanvas-toggle">
-                      <i class="far fa-heart"></i>
-                      <span class="item-count">{{ wishlist.length }}</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a v-b-toggle.offcanvas-add-cart class="offcanvas-toggle">
-                      <i class="fas fa-shopping-bag"></i>
-                      <span class="item-count">{{ cart.length }}</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      v-b-toggle.search_sidebar
-                      class="search_width offcanvas-toggle"
+                  <template v-if="$auth && $auth.isAuthenticated()">
+                    <li>
+                      <a v-b-toggle.offcanvas-wishlish class="offcanvas-toggle">
+                        <i class="far fa-heart"></i>
+                        <span class="item-count">{{ wishlist.length }}</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a v-b-toggle.offcanvas-add-cart class="offcanvas-toggle">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="item-count">{{ cart.length }}</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        v-b-toggle.search_sidebar
+                        class="search_width offcanvas-toggle"
+                      >
+                        <img src="~/assets/img/svg/search.svg" alt="img" />
+                      </a>
+                    </li>
+                  </template>
+                  <template v-else>
+                    <a href="/login" class="btn btn-primary px-16 mr-4"
+                      >Giriş Yap</a
                     >
-                      <img src="~/assets/img/svg/search.svg" alt="img" />
-                    </a>
-                  </li>
+                  </template>
                   <li>
                     <a
                       v-b-toggle.offcanvas-about
@@ -122,14 +130,7 @@
     <!-- Start Mobile Header -->
     <div
       id="mobile_header"
-      class="
-        mobile-header
-        sticky-header
-        sticky-color--golden
-        mobile-header-bg-color--golden
-        section-fluid
-        d-lg-block d-xl-none
-      "
+      class="mobile-header sticky-header sticky-color--golden mobile-header-bg-color--golden section-fluid d-lg-block d-xl-none"
     >
       <div class="container">
         <div class="row">
@@ -151,32 +152,35 @@
             <!-- Start Mobile Right Side -->
             <div class="mobile-right-side">
               <ul
-                class="
-                  header-action-link
-                  action-color--black
-                  action-hover-color--golden
-                "
+                class="header-action-link action-color--black action-hover-color--golden"
               >
-                <li>
-                  <a
-                    v-b-toggle.search_sidebar
-                    class="search_width offcanvas-toggle"
+                <template v-if="$auth && $auth.isAuthenticated()">
+                  <li>
+                    <a
+                      v-b-toggle.search_sidebar
+                      class="search_width offcanvas-toggle"
+                    >
+                      <img src="~/assets/img/svg/search.svg" alt="img" />
+                    </a>
+                  </li>
+                  <li>
+                    <a v-b-toggle.offcanvas-wishlish class="offcanvas-toggle">
+                      <i class="far fa-heart"></i>
+                      <span class="item-count">{{ wishlist.length }}</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a v-b-toggle.offcanvas-add-cart class="offcanvas-toggle">
+                      <i class="fas fa-shopping-bag"></i>
+                      <span class="item-count">{{ cart.length }}</span>
+                    </a>
+                  </li>
+                </template>
+                <template v-else>
+                  <a href="/login" class="btn btn-primary px-16 mr-4"
+                    >Giriş Yap</a
                   >
-                    <img src="~/assets/img/svg/search.svg" alt="img" />
-                  </a>
-                </li>
-                <li>
-                  <a v-b-toggle.offcanvas-wishlish class="offcanvas-toggle">
-                    <i class="far fa-heart"></i>
-                    <span class="item-count">{{ wishlist.length }}</span>
-                  </a>
-                </li>
-                <li>
-                  <a v-b-toggle.offcanvas-add-cart class="offcanvas-toggle">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span class="item-count">{{ cart.length }}</span>
-                  </a>
-                </li>
+                </template>
                 <li>
                   <a
                     v-b-toggle.offcanvas-about
@@ -237,7 +241,9 @@
         <ul class="user-link">
           <li><nuxt-link to="/my-account/wishlist">Favoriler</nuxt-link></li>
           <li><nuxt-link to="/cart/">Sepet</nuxt-link></li>
-          <li><nuxt-link to="/my-account/checkout-1">Siparişi Tamamla</nuxt-link></li>
+          <li>
+            <nuxt-link to="/my-account/checkout-1">Siparişi Tamamla</nuxt-link>
+          </li>
         </ul>
       </div>
       <!-- End Mobile contact Info -->
@@ -387,11 +393,7 @@
               <div class="offcanvas-wishlist-item-delete text-right">
                 <button
                   @click="removeWishlistItem(item)"
-                  class="
-                    offcanvas-wishlist-item-delete
-                    bg-transparent
-                    remove-btn
-                  "
+                  class="offcanvas-wishlist-item-delete bg-transparent remove-btn"
                 >
                   <i class="far fa-trash-alt"></i>
                 </button>
@@ -419,16 +421,7 @@
     <!-- Start Offcanvas Search Bar Section -->
     <b-sidebar id="search_sidebar" backdrop>
       <div
-        class="
-          px-3
-          py-2
-          search-sidebar-content-wrap
-          d-flex
-          justify-content-center
-          align-content-center
-          w-100
-          h-100
-        "
+        class="px-3 py-2 search-sidebar-content-wrap d-flex justify-content-center align-content-center w-100 h-100"
       >
         <form
           class="d-flex flex-column justify-content-center product-search-form"
@@ -750,4 +743,14 @@ export default {
   box-shadow: 3px 0px 0px 0px var(--main-theme-color) inset;
 }
 /* Mobile Menu Multi Dropdown Items End */
+
+/* Login Button Styling */
+.header-login-text {
+  margin-left: 5px;
+  font-weight: 600;
+}
+
+.offcanvas-toggle i.fas.fa-user {
+  font-size: 1.2rem;
+}
 </style>
