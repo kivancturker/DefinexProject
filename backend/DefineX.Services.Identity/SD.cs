@@ -39,8 +39,9 @@ namespace DefineX.Services.Identity
                     ClientId="DefineX",
                     ClientSecrets= { new Secret("secret".Sha256())},
                     AllowedGrantTypes = GrantTypes.Code,
-                    RedirectUris={ "https://localhost:44378/signin-oidc" },
-                    PostLogoutRedirectUris={"https://localhost:44378/signout-callback-oidc" },
+                    // My Frontend URL for redirection and its development only
+                    RedirectUris={ "http://localhost:3000/signin-oidc" },
+                    PostLogoutRedirectUris={"http://localhost:3000/signout-callback-oidc" },
                     AllowedScopes=new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,

@@ -1,22 +1,16 @@
 import axios from "axios";
+import { API } from "@/constants/api-constants";
 
-const API_URL = "http://localhost";
-const API_PORT = 5000;
-const BASE_URL = `${API_URL}:${API_PORT}`;
-
-// Auth configuration
-// const AUTH_URL = "https://localhost:44365"; // Identity Server URL
-// const CLIENT_ID = "definex_client";
-// const SCOPE = "definex";
+const BASE_URL = `${API.BASE.URL}:${API.BASE.PORT}`;
 
 // Create axios instance
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json",
+    "Content-Type": API.HEADERS.CONTENT_TYPE,
   },
   // Configure how redirects are handled
-  maxRedirects: 5,
+  maxRedirects: API.CONFIG.MAX_REDIRECTS,
 });
 
 export default axiosInstance;

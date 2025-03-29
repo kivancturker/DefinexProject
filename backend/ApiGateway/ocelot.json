@@ -26,6 +26,56 @@
       "CopyQueryStringToDownstreamPath": true
     },
     {
+      "DownstreamPathTemplate": "/connect/authorize",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44365
+        }
+      ],
+      "UpstreamPathTemplate": "/connect/authorize",
+      "UpstreamHttpMethod": ["GET", "POST"],
+      "CopyQueryStringToDownstreamPath": true
+    },
+    {
+      "DownstreamPathTemplate": "/connect/token",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44365
+        }
+      ],
+      "UpstreamPathTemplate": "/connect/token",
+      "UpstreamHttpMethod": ["POST"]
+    },
+    {
+      "DownstreamPathTemplate": "/connect/userinfo",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44365
+        }
+      ],
+      "UpstreamPathTemplate": "/connect/userinfo",
+      "UpstreamHttpMethod": ["GET"]
+    },
+    {
+      "DownstreamPathTemplate": "/connect/endsession",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44365
+        }
+      ],
+      "UpstreamPathTemplate": "/connect/endsession",
+      "UpstreamHttpMethod": ["GET", "POST"],
+      "CopyQueryStringToDownstreamPath": true
+    },
+    {
       "DownstreamPathTemplate": "/lib/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
