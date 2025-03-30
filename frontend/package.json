@@ -9,6 +9,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@microsoft/signalr": "^8.0.7",
     "apexcharts": "^3.27.3",
     "axios": "^1.8.4",
     "bootstrap": "^4.6.0",

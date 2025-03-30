@@ -16,6 +16,9 @@
       <b-nav-item to="/my-account/account-details"
         ><i class="fas fa-user"></i>Account details</b-nav-item
       >
+      <b-nav-item to="/my-account/chat"
+        ><i class="fas fa-comments"></i>Chat</b-nav-item
+      >
       <b-nav-item @click="logout"
         ><i class="fas fa-sign-out-alt"></i>Logout</b-nav-item
       >

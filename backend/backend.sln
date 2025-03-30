@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Definex.Services.ProductAPI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefineX.Services.Identity", "DefineX.Services.Identity\DefineX.Services.Identity.csproj", "{91DA490A-4BF2-4C79-B2F4-4A4765F73F9D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefineX.Services.ChatAPI", "DefineX.Services.ChatAPI\DefineX.Services.ChatAPI.csproj", "{D66413D1-A82F-4EF6-9F26-A990D4F5E328}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,7 @@ Global
 		{B820FA07-65BE-4555-A61B-330DA3D0E1EC} = {8AF2C64C-23D9-4F1C-B905-E4A9AFD94B90}
 		{31EFA144-2C6B-49DF-94BD-35B074DEE681} = {5E0314E5-A05E-457C-8B2E-4FFC790FDFEB}
 		{91DA490A-4BF2-4C79-B2F4-4A4765F73F9D} = {5E0314E5-A05E-457C-8B2E-4FFC790FDFEB}
+		{D66413D1-A82F-4EF6-9F26-A990D4F5E328} = {5E0314E5-A05E-457C-8B2E-4FFC790FDFEB}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B820FA07-65BE-4555-A61B-330DA3D0E1EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -33,5 +36,9 @@ Global
 		{91DA490A-4BF2-4C79-B2F4-4A4765F73F9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91DA490A-4BF2-4C79-B2F4-4A4765F73F9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91DA490A-4BF2-4C79-B2F4-4A4765F73F9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D66413D1-A82F-4EF6-9F26-A990D4F5E328}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D66413D1-A82F-4EF6-9F26-A990D4F5E328}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D66413D1-A82F-4EF6-9F26-A990D4F5E328}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D66413D1-A82F-4EF6-9F26-A990D4F5E328}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -72,6 +72,14 @@
                               >Siparişlerim</nuxt-link
                             >
                           </li>
+                          <li>
+                            <nuxt-link to="/my-account/chat">Chat</nuxt-link>
+                          </li>
+                          <li v-if="$auth && $auth.isAdmin()">
+                            <nuxt-link to="/admin/dashboard"
+                              >Admin Panel</nuxt-link
+                            >
+                          </li>
                         </ul>
                       </li>
                     </ul>

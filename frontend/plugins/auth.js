@@ -1,6 +1,7 @@
 import AuthService from "@/services/auth-service";
 import http from "@/utils/http-common";
 import { API } from "@/constants/api-constants";
+import profileUtils from "@/utils/profile-util";
 
 export default ({ app, store, redirect }, inject) => {
   // Add an interceptor to attach the access token to requests
@@ -63,6 +64,22 @@ export default ({ app, store, redirect }, inject) => {
   const auth = {
     isAuthenticated: AuthService.isAuthenticated,
     getUserProfile: AuthService.getUserProfile,
+    isAdmin: () => {
+      const accessToken = AuthService.getAccessToken();
+      return profileUtils.isAdmin(accessToken);
+    },
+    isCustomer: () => {
+      const accessToken = AuthService.getAccessToken();
+      return profileUtils.isCustomer(accessToken);
+    },
+    getUserRoles: () => {
+      const accessToken = AuthService.getAccessToken();
+      return profileUtils.getUserRoles(accessToken);
+    },
+    debug: () => {
+      const accessToken = AuthService.getAccessToken();
+      return profileUtils.debugTokenInfo(accessToken);
+    },
     login: () => {
       window.location.href = AuthService.login();
     },
