@@ -104,7 +104,7 @@
 <script>
 import MyAccountNavbar from "@/components/MyAccountNavbar.vue";
 import * as signalR from "@microsoft/signalr";
-
+import API from "@/constants/api-constants";
 export default {
   name: "Chat",
   components: {
@@ -145,7 +145,7 @@ export default {
   methods: {
     createConnection() {
       this.connection = new signalR.HubConnectionBuilder()
-        .withUrl("http://localhost:5224/chat")
+        .withUrl(API.BASE.CHAT_URL)
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
